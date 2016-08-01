@@ -102,7 +102,7 @@ if __name__ == '__main__':
     gps_origin = (float(latitude), float(longitude)) 
 
     global pub
-    pub = rospy.Publisher("gps_pos_meters", Pose, queue_size=10)
+    pub = rospy.Publisher("jackal/gps_estimate", Pose, queue_size=10)
 
     #Subscribe to raw GPS topic. 
     sub = rospy.Subscriber("navsat/fix", NavSatFix, converter_callback) 
