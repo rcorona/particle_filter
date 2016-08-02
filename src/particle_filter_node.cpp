@@ -133,6 +133,12 @@ void weigh_using_gps_and_imu(Particle *particle, void **args) {
 	particle->weight = 5 * gps_weight;//imu_weight * gps_weight;
 }
 
+double rad_to_degrees(double radians) {
+	double pi = 3.1415926535897;
+
+	return radians * (180 / pi);
+}
+
 particle_filter::Particle_vector read_in_particles(ParticleFilter *pf, ros::Publisher *estimate_pub) {
 	std::vector<Particle> particles = pf->get_particles(); 
 
@@ -158,7 +164,7 @@ particle_filter::Particle_vector read_in_particles(ParticleFilter *pf, ros::Publ
 
 	std_pose_estimate.x = particle_vector.pose_estimate.x = pose_estimate.x;
 	std_pose_estimate.y = particle_vector.pose_estimate.y = pose_estimate.y;
-	std_pose_estimate.theta = particle_vector.pose_estimate.theta = pose_estimate.theta;
+	std_pose_estimate.theta = particle_vector.pose_estimate.theta = rad_to_degrees(pose_estimate.theta);
 
 	//Publishes pose estimate standard Pose message. 
 	estimate_pub->publish(std_pose_estimate); 
