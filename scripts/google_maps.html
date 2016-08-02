@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+		<style>
+			#map {
+				width: 640px;
+				height: 360px;
+				background-color: #CCC;
+			}
+		</style>
+	<body>
+		<div id="map"></div>
+		<script>
+			function initMap() {	 
+				var mapDiv = document.getElementById('map');
+  				var map = new google.maps.Map(mapDiv, {
+		      		mapTypeId: google.maps.MapTypeId.ROADMAP
+			    });
+
+    			var southWest = new google.maps.LatLng(42.393760,-72.526342);
+	  			var northEast = new google.maps.LatLng(42.395416,-72.531862);
+	    		var bounds = new google.maps.LatLngBounds();
+				bounds.extend(southWest);
+				bounds.extend(northEast); 
+
+		  		map.fitBounds(bounds);
+
+				var listener = google.maps.event.addListener(map,
+					"bounds_changed", function() {
+					console.log(map.getBounds());
+				}); 
+			}
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+			async defer>
+		</script>
+	</body>
+<html>
