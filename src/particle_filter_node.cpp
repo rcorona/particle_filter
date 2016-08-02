@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
 	ros::Subscriber odom_sub = node.subscribe("jackal_velocity_controller/odom", 1000, odom_callback); 
 
 	//Subscribes to GPS topic. 
-	ros::Subscriber gps_sub = node.subscribe("gps_pos_meters", 1000, gps_callback); 
+	ros::Subscriber gps_sub = node.subscribe("jackal/gps_estimate", 1000, gps_callback); 
 
 	//Subscribes to IMU topic. 
 	//ros::Subscriber imu_sub = node.subscribe("imu/data", 1000, imu_callback); 
