@@ -154,11 +154,11 @@ particle_filter::Particle_vector read_in_particles(ParticleFilter *pf, ros::Publ
 
 	//Gets pose estimate for robot. 
 	Pose pose_estimate = pf->get_pose_estimate();
-	geometry_msgs::Pose std_pose_estimate = geometry_msgs::Pose(); 
+	particle_filter::Pose std_pose_estimate = particle_filter::Pose(); 
 
-	std_pose_estimate.position.x = particle_vector.pose_estimate.x = pose_estimate.x;
-	std_pose_estimate.position.y = particle_vector.pose_estimate.y = pose_estimate.y;
-	std_pose_estimate.orientation.x = particle_vector.pose_estimate.theta = pose_estimate.theta;
+	std_pose_estimate.x = particle_vector.pose_estimate.x = pose_estimate.x;
+	std_pose_estimate.y = particle_vector.pose_estimate.y = pose_estimate.y;
+	std_pose_estimate.theta = particle_vector.pose_estimate.theta = pose_estimate.theta;
 
 	//Publishes pose estimate standard Pose message. 
 	estimate_pub->publish(std_pose_estimate); 
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
 	ros::Publisher pub = node.advertise<particle_filter::Particle_vector>("particle_filter", 1000); 
 	ros::Rate loop_rate(10); 
 
-	ros::Publisher estimate_pub = node.advertise<geometry_msgs::Pose>("jackal/pose_estimate", 1000); 
+	ros::Publisher estimate_pub = node.advertise<particle_filter::Pose>("jackal/pose_estimate", 1000); 
 
 	//Initialises the particle filter. 
 	pf = new ParticleFilter(500, &weigh_using_gps_and_imu); 
@@ -211,8 +211,6 @@ int main(int argc, char **argv) {
 	//Waits for first odometry reading. 
 	while (!can_start() && ros::ok())
 		ros::spinOnce();
-
-	std::cout << "HERE" << std::endl; 
 
 	while (ros::ok()) {
 		//Publishes current set of particles and sleeps.
