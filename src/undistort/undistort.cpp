@@ -56,12 +56,12 @@ int main(int argc, char const *argv[])
   cv::fisheye::undistortImage(img_resized, u1, Matx33d(K1), Mat(D1), K1new);
 
   //Resizes the images to their final resolution. 
-  cv::Mat u2; 
-  resize(u1, u2, Size(360, 224));
+  //cv::Mat u2; 
+  //resize(u1, u2, Size(360, 224));
 
   //Writes final image to file. 
   cout << "writing to file..." << endl;
-  imwrite(argv[3], u2);
+  imwrite(argv[3], u1);
   
   return 0;
 }
