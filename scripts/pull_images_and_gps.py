@@ -20,7 +20,20 @@ Usage for multiple files: ./pull_images_and_gps.py multiple [folder] [rate]
         folder: The folder which contains the bag files to be processed. 
         rate: The rate in meters to pull (i.e. sample) images in. 
             
+NOTES: 
 
+    For each bag file, a folder is created using the 
+    bag file's name without extension. This folder
+    is where the results of the processing will be found. 
+
+    Data written to file in following format: 
+
+    time_1;lat_1;long_1;img_1
+    time_2;lat_2;long_2;img_2
+    .
+    .
+    .
+    time_n;lat_n;long_n;img_n
 
 Author: Rodolfo Corona, rcorona@utexas.edu
 """
@@ -33,7 +46,7 @@ import os
 
 """
 Prepares the data for the image using the latest values 
-in the bag file. 
+in the bag file.
 """
 def write_data(camera_folder, data_file, latest_values):
     #Writes image to jpg file in pertaining camera's folder. 
@@ -45,7 +58,8 @@ def write_data(camera_folder, data_file, latest_values):
     img_file.close()
 
     #Writes images label to the label file.
-    data = str(latest_values['gps'].latitude) + ';'
+    data = str(latest_values['time']) + ';'
+    data += str(latest_values['gps'].latitude) + ';'
     data += str(latest_values['gps'].longitude) + ';'
     data += img_file_name + '\n'
 
@@ -104,11 +118,15 @@ def pull_every_n_meters(file_name, rate, camera):
     latest_values = {
                      'img': None, 
                      'gps': None,
-                     'img_counter': 0
+                     'img_counter': 0,
+                     'time': 0.0
                     }
 
     #Reads bag file to pull images. 
     for topic, msg, t in bag_file.read_messages():
+        #Updates time reading. 
+        latest_values['time'] = t
+
         #First three topics merely update their respective reading. 
         if topic == camera_topic:
             latest_values['img'] = msg
@@ -154,19 +172,21 @@ def process_folder(folder, rate, camera):
             print 'Pulling from ' + folder + '/' + entry + '...'
             pull_every_n_meters(folder + '/' + entry, rate, camera)
 
+def print_usage()
+    print 'Usage for single file: ./pull_images_and_gps.py single [bag_file_name.bag] [rate]'
+    print 'Usage for multiple files: ./pull_images_and_gps.py multiple [folder] [rate]'
+ 
 """
 If summoned from the command line, then just go through pulling
 procedure. 
 """
 if __name__ == "__main__":
     if not len(sys.argv) == 4:
-        print 'Usage for single file: ./pull_images_and_gps.py single [bag_file_name.bag] [rate]'
-        print 'Usage for multiple files: ./pull_images_and_gps.py multiple [folder] [rate]'
+        print_usage()
     elif sys.argv[1] == 'single':
         #For now only pulls from the left camera. 
         pull_every_n_meters(sys.argv[2], sys.argv[3], 'left')
     elif sys.argv[1] == 'multiple':
         process_folder(sys.argv[2], sys.argv[3], 'left')
     else:
-        print 'Usage for single file: ./pull_images_and_gps.py single [bag_file_name.bag] [rate]'
-        print 'Usage for multiple files: ./pull_images_and_gps.py multiple [folder] [rate]'
+        print_usage()
