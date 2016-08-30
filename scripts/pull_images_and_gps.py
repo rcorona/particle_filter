@@ -125,7 +125,7 @@ def pull_every_n_meters(file_name, rate, camera):
     #Reads bag file to pull images. 
     for topic, msg, t in bag_file.read_messages():
         #Updates time reading. 
-        latest_values['time'] = t
+        latest_values['time'] = t.to_sec()
 
         #First three topics merely update their respective reading. 
         if topic == camera_topic:
@@ -172,7 +172,7 @@ def process_folder(folder, rate, camera):
             print 'Pulling from ' + folder + '/' + entry + '...'
             pull_every_n_meters(folder + '/' + entry, rate, camera)
 
-def print_usage()
+def print_usage():
     print 'Usage for single file: ./pull_images_and_gps.py single [bag_file_name.bag] [rate]'
     print 'Usage for multiple files: ./pull_images_and_gps.py multiple [folder] [rate]'
  
