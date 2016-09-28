@@ -27,8 +27,8 @@ import os
 import sys
 import subprocess
 
-#Path to undistort executable TODO Change if needed. 
-undistort_path = '/home/rcorona/catkin_ws/src/particle_filter/src/undistort/'
+#Path to undistort executable, should be in build folder.  TODO Change if needed. 
+undistort_path = '/home/rcorona/catkin_ws/src/particle_filter/src/undistort/build/'
 
 def undistort_folder(input_folder, output_folder, camera):
     if camera == 'left':
